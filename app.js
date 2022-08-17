@@ -1,4 +1,5 @@
 const { App } = require("@slack/bolt");
+const fs = require("fs");
 require("dotenv").config();
 
 const app = new App({
@@ -6,15 +7,101 @@ const app = new App({
   signingSecret: process.env.SLACK_SIGNING_SECRET
 });
 
+let faqs = JSON.parse(fs.readFileSync("db.json"));
+
 app.command("/knowledge", async ({ command, ack, say }) => {
   try {
-    console.log(this)
-    console.log(ack);
+    console.log(command)
     await ack();
-    console.log("here");
-    say("Yaaay! that command works!");
+    let message = { blocks: [] };
+    faqs.data.map((faq) => {
+      message.blocks.push(
+        {
+          type: "section",
+          text: {
+            type: "mrkdwn",
+            text: "*Question*",
+          }
+        },
+        {
+          type: "section",
+          text: {
+            type: "mrkdwn",
+            text: faq.question,
+          }
+        },
+        {
+            type: "section",
+            text: {
+              type: "mrkdwn",
+              text: "*Answer*",
+            }
+          },
+          {
+            type: "section",
+            text: {
+              type: "mrkdwn",
+              text: faq.answer,
+            }
+          }
+      );
+    });
+    say(message);
   } catch (error) {
-      console.log("err")
+    console.log("err")
+    console.error(error);
+  }
+});
+
+app.message(/hey/, async({ message, say }) => {
+  try {
+    console.log(message)
+    say(`Hey there ${message.user}!`);
+  } catch(error) {
+    console.log("err");
+    console.error(error);
+  }
+});
+
+app.message(/products/, async({ message, say }) => {
+  try {
+    let message = { blocks: [] };
+    const productsFAQ = faqs.data.filter((faq) => faq.keyword === "products");
+    productsFAQ.map(faq => {
+      message.blocks.push(
+        {
+          type: "section",
+          text: {
+            type: "mrkdwn",
+            text: "*Question*"
+          }
+        },
+        {
+          type: "section",
+          text: {
+            type: "mrkdwn",
+            text: faq.question
+          }
+        },
+        {
+          type: "section",
+          text: {
+            type: "mrkdwn",
+            text: "*Answer*"
+          }
+        },
+        {
+          type: "section",
+          text: {
+            type: "mrkdwn",
+            text: faq.answer
+          }
+        }
+      );
+    });
+    say(message);
+  } catch(error) {
+    console.log("err");
     console.error(error);
   }
 });
