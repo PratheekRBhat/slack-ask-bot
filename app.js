@@ -1,4 +1,5 @@
 const { App } = require("@slack/bolt");
+const { error } = require("console");
 const fs = require("fs");
 require("dotenv").config();
 
@@ -9,9 +10,8 @@ const app = new App({
 
 let faqs = JSON.parse(fs.readFileSync("db.json"));
 
-app.command("/knowledge", async ({ command, ack, say }) => {
+app.command("/eng-faq", async ({ command, ack, say }) => {
   try {
-    console.log(command)
     await ack();
     let message = { blocks: [] };
     faqs.data.map((faq) => {
@@ -53,9 +53,33 @@ app.command("/knowledge", async ({ command, ack, say }) => {
   }
 });
 
+app.command("/eng-update", async ({command, ack, say}) => {
+  try {
+    await ack();
+    const data = command.text.split("|");
+    const newFAQ = {
+      keyword: data[0],
+      question: data[1],
+      answer: data[2],
+    }
+
+    fs.readFile("db.json", function(err, data) {
+      const json = JSON.parse(data);
+      json.data.push(newFAQ);
+      fs.writeFile("db.json", JSON.stringify(json), function(err) {
+        if (err) throw err;
+        console.log("Successfully written to db.json");
+      });
+    });
+    say(`You've added a new FAQ with keyword ${newFAQ.keyword}`);
+  } catch (error) {
+    console.log("err");
+    console.error(error);
+  }
+});
+
 app.message(/hey/, async({ message, say }) => {
   try {
-    console.log(message)
     say(`Hey there ${message.user}!`);
   } catch(error) {
     console.log("err");
@@ -110,5 +134,4 @@ app.message(/products/, async({ message, say }) => {
   const port = 3060;
 
   await app.start(process.env.PORT || port);
-  console.log(`Slack bot started on port ${port}`);
 })();
