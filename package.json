@@ -1,0 +1,24 @@
+{
+  "name": "slack-ask-bot",
+  "version": "1.0.0",
+  "description": "A simple Q&A slack bot.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PratheekRBhat/slack-ask-bot.git"
+  },
+  "author": "Pratheek Bhat",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PratheekRBhat/slack-ask-bot/issues"
+  },
+  "homepage": "https://github.com/PratheekRBhat/slack-ask-bot#readme",
+  "dependencies": {
+    "eslint": "^8.21.0"
+  },
+  "devDependencies": {},
+  "keywords": []
+}
