@@ -6,6 +6,19 @@ const app = new App({
   signingSecret: process.env.SLACK_SIGNING_SECRET
 });
 
+app.command("/knowledge", async ({ command, ack, say }) => {
+  try {
+    console.log(this)
+    console.log(ack);
+    await ack();
+    console.log("here");
+    say("Yaaay! that command works!");
+  } catch (error) {
+      console.log("err")
+    console.error(error);
+  }
+});
+
 (async () => {
   const port = 3060;
 
