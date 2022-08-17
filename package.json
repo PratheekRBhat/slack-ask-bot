@@ -4,6 +4,7 @@
   "description": "A simple Q&A slack bot.",
   "main": "index.js",
   "scripts": {
+    "dev": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -17,7 +18,10 @@
   },
   "homepage": "https://github.com/PratheekRBhat/slack-ask-bot#readme",
   "dependencies": {
-    "eslint": "^8.21.0"
+    "@slack/bolt": "^3.12.1",
+    "dotenv": "^16.0.1",
+    "eslint": "^8.21.0",
+    "nodemon": "^2.0.19"
   },
   "devDependencies": {},
   "keywords": []
